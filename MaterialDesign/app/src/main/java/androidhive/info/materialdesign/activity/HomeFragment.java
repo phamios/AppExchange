@@ -12,6 +12,7 @@ import androidhive.info.materialdesign.tabs.Tab1;
 import androidhive.info.materialdesign.tabs.Tab2;
 import androidhive.info.materialdesign.tabs.Tab3;
 import androidhive.info.materialdesign.R;
+import androidhive.info.materialdesign.tabs.Tab4;
 
 
 public class HomeFragment extends Fragment {
@@ -45,6 +46,9 @@ public class HomeFragment extends Fragment {
         mTabHost.addTab(
                 mTabHost.newTabSpec("tab3").setIndicator(getString(R.string.tab_giftchange), null),
                 Tab3.class, null);
+        mTabHost.addTab(
+                mTabHost.newTabSpec("tab4").setIndicator(getString(R.string.tab_appinstalled), null),
+                Tab4.class, null);
         // Inflate the layout for this fragment
         return rootView;
     }

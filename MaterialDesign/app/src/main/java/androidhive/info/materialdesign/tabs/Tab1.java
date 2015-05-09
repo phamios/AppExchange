@@ -1,11 +1,13 @@
 package androidhive.info.materialdesign.tabs;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidhive.info.materialdesign.R;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,7 @@ public class Tab1 extends Fragment {
     private static final String TAG = Tab1.class.getSimpleName();
 
     // Apps json url
-    private static final String url = "http://ytube301.com/api/admega";
+    private static final String url = "http://ytube301.com/api/list_app_by_user";
     private ProgressDialog pDialog;
     private List<App> AppList = new ArrayList<App>();
     private ListView listView;
@@ -65,12 +67,14 @@ public class Tab1 extends Fragment {
         pDialog.setMessage("Đang tải nội dung...");
         pDialog.show();
 
+        TelephonyManager telephonyManager = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        Log.w("URL_USER>>>>>", url + "/" + telephonyManager.getDeviceId());
         // Creating volley request obj
-        JsonArrayRequest AppReq = new JsonArrayRequest(url,
+        JsonArrayRequest AppReq = new JsonArrayRequest(url + "/" + telephonyManager.getDeviceId(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.w(">>>", response.toString());
+                        Log.w("LISTAPP>>>>>", response.toString());
                         hidePDialog();
                         // Parsing json
                         for (int i = 0; i < response.length(); i++) {

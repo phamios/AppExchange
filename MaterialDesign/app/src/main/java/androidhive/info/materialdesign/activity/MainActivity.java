@@ -30,7 +30,11 @@ import androidhive.info.materialdesign.util.PostJson;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.os.Build;
-
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Notification;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -56,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        notifyUser();
+
         //GET IMEI ANDROID
         TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -68,7 +74,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         PostJson postinfo = new PostJson();
         String[] phoneState = PhoneState();
         String checkResult = postinfo.CheckExit(URL_AUTHEN + telephonyManager.getDeviceId());
-        if(Integer.parseInt(checkResult) == 0){
+        Log.d("RESULT_REGISTER>>>>",checkResult);
+        if(Integer.parseInt(checkResult) != 0){
+
+        } else {
             String userid = postinfo.CheckorReg(URL_REG, telephonyManager.getDeviceId(),
                     phoneState[1],
                     phoneState[2],
@@ -176,8 +185,34 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_intro);
                 break;
             case 6:
-                finish();
-                System.exit(0);
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle("Thoát ứng dụng ?");
+
+                // Setting Dialog Message
+                alertDialog.setMessage("Bạn có chắc muốn thoát khỏi ứng dụng này ?");
+
+                // Setting Icon to Dialog
+               // alertDialog.setIcon(R.drawable.delete);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        System.exit(0);
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialog.show();
+
                 title = getString(R.string.title_exit);
                 break;
             default:
@@ -193,4 +228,31 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             getSupportActionBar().setTitle(title);
         }
     }
+
+
+    public void notifyUser() {
+
+        NotificationManager notificationManager = (NotificationManager) this
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent intent = new Intent(MainActivity.this, HomeFragment.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        // use the flag FLAG_UPDATE_CURRENT to override any notification already
+        // there
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new Notification(R.drawable.ic_profile,
+                "Có ứng dụng mới, nhanh tay cài đặt để kiếm tiền ...", System.currentTimeMillis());
+        notification.flags = Notification.FLAG_AUTO_CANCEL
+                | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
+
+        notification.setLatestEventInfo(this, getString(R.string.app_name),
+                "Ứng dụng mới , cài đặt ngay !", pendingIntent);
+        // 10 is a random number I chose to act as the id for this notification
+        notificationManager.notify(10, notification);
+    }
+
+
 }
