@@ -24,6 +24,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -84,21 +86,21 @@ public class PostJson {
     }
 
     //Kiểm tra IMEI có tồn tại trên hệ thống chưa
-    public static int  CheckExit(String url,String imei){
+    public static String CheckExit(String url){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        HttpResponse response = null;
-
         // Creating HTTP client
         HttpClient httpClient = new DefaultHttpClient();
+        BufferedReader in = null;
+
         // Creating HTTP Post
         HttpPost httpPost = new HttpPost(url);
-
+        String body = null;
         // Building post parameters
         // key and value pair
         List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(6);
-        nameValuePair.add(new BasicNameValuePair("imei",imei));
+        nameValuePair.add(new BasicNameValuePair("imei","test"));
 
         // Url Encoding the POST parameters
         try {
@@ -108,26 +110,29 @@ public class PostJson {
             e.printStackTrace();
         }
 
+        String output = null;
+
         // Making HTTP Request
         try {
-             response = httpClient.execute(httpPost);
-            // writing response to log
-            Log.d("Http Response:", response.toString());
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity httpEntity = response.getEntity();
+            output = EntityUtils.toString(httpEntity);
+
+            Log.d(">>>>>>>>>>>>>>",output);
         } catch (ClientProtocolException e) {
-            // writing exception to log
             e.printStackTrace();
         } catch (IOException e) {
-            // writing exception to log
             e.printStackTrace();
 
         }
 
-        return response;
+        return output;
+       // return response.toString();
     }
 
 
     //Đăng ký User
-    public static void CheckorReg(String url,String imei,String carriel, String number,String operator, String manufacturer, String model) {
+    public static String CheckorReg(String url,String imei,String carriel, String number,String operator, String manufacturer, String model) {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
@@ -156,12 +161,55 @@ public class PostJson {
             // writing error to Log
             e.printStackTrace();
         }
+        String output = null;
+        // Making HTTP Request
+        try {
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity httpEntity = response.getEntity();
+            output = EntityUtils.toString(httpEntity);
+        } catch (ClientProtocolException e) {
+            // writing exception to log
+            e.printStackTrace();
+        } catch (IOException e) {
+            // writing exception to log
+            e.printStackTrace();
+        }
+        return output;
+    }
+
+
+    //Check History
+    public static String History(String url,String imei) {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
+        // Creating HTTP client
+        HttpClient httpClient = new DefaultHttpClient();
+        // Creating HTTP Post
+        HttpPost httpPost = new HttpPost(url);
+
+        // Building post parameters
+        // key and value pair
+        List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(6);
+        nameValuePair.add(new BasicNameValuePair("user_imei",imei));
+        // Url Encoding the POST parameters
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+        } catch (UnsupportedEncodingException e) {
+            // writing error to Log
+            e.printStackTrace();
+        }
+        String output = null;
 
         // Making HTTP Request
         try {
             HttpResponse response = httpClient.execute(httpPost);
-            // writing response to log
-            Log.d("Http Response:", response.toString());
+            HttpEntity httpEntity = response.getEntity();
+            output = EntityUtils.toString(httpEntity);
+            Log.d(">>>>>>>>>>>>>>",output);
         } catch (ClientProtocolException e) {
             // writing exception to log
             e.printStackTrace();
@@ -170,7 +218,13 @@ public class PostJson {
             e.printStackTrace();
 
         }
+
+        return output;
     }
+
+
+
+
 
 
 }

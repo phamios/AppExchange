@@ -24,9 +24,19 @@
         <item>@string/nav_item_intro</item>
         <item>@string/nav_item_exit</item>
     </string-array>
+    <string-array name="nav_drawer_icon">
+        <item>@drawable/doi_xu</item>
+        <item>@drawable/doi_qua</item>
+        <item>@drawable/info</item>
+        <item>@drawable/fb</item>
+        <item>@drawable/danhgia</item>
+        <item>@drawable/ungdung</item>
+        <item>@drawable/log_out</item>
+    </string-array>
 
     <string name="title_messages">Messages</string>
     <string name="title_friends">Friends</string>
+
     <string name="profile_info">Thông tin cá nhân</string>
     <string name="title_home">Ứng dụng của bạn</string>
     <string name="title_history">Lịch sử đổi quà</string>

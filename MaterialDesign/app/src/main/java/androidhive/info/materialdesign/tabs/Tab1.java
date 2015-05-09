@@ -62,7 +62,7 @@ public class Tab1 extends Fragment {
         listView.setAdapter(adapter);
 
         pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage("Đang tải nội dung...");
         pDialog.show();
 
         // Creating volley request obj

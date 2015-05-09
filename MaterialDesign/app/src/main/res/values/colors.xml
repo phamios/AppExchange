@@ -10,10 +10,13 @@
     <color name="ColorPrimary">#e62117</color>
     <color name="ColorPrimaryDark">#c31c13</color>
     <color name="tabsScrollColor">#8a140e</color>
+    <color name="SlideMenu">#000000</color>
+    <color name="TextColor">#FFFFFF</color>
 
 
 
     <color name="genre">#666666</color>
+
     <color name="year">#888888</color>
     <color name="list_divider">#d9d9d9</color>
     <color name="list_row_start_color">#ffffff</color>

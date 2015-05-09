@@ -23,7 +23,7 @@ import androidhive.info.materialdesign.fragment.ShareFragment;
 import androidhive.info.materialdesign.tabs.SlidingTabLayout;
 import androidhive.info.materialdesign.tabs.ViewPagerAdapter;
 
-
+import android.util.Log;
 import androidhive.info.materialdesign.R;
 import androidhive.info.materialdesign.util.PostJson;
 
@@ -41,8 +41,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
-    private String URL = "http://ytube301.com/api/authenmobile";
-
+    private String URL_REG = "http://ytube301.com/api/insert_mobile_user/";
+    private String URL_AUTHEN = "http://ytube301.com/api/authenmobile/";
    // Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter adapter;
@@ -67,14 +67,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         PostJson postinfo = new PostJson();
         String[] phoneState = PhoneState();
-        postinfo.CheckorReg(URL + "/" + telephonyManager.getDeviceId(), telephonyManager.getDeviceId(),
-                phoneState[1],
-                phoneState[2],
-                phoneState[3],
-                phoneState[4],
-                phoneState[5]);
-
-
+        String checkResult = postinfo.CheckExit(URL_AUTHEN + telephonyManager.getDeviceId());
+        if(Integer.parseInt(checkResult) == 0){
+            String userid = postinfo.CheckorReg(URL_REG, telephonyManager.getDeviceId(),
+                    phoneState[1],
+                    phoneState[2],
+                    phoneState[3],
+                    phoneState[4],
+                    phoneState[5]);
+            Log.d(">>>>> REGINFO ",userid);
+        }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
@@ -174,7 +176,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_intro);
                 break;
             case 6:
-               //fragment = new MessagesFragment();
+                finish();
+                System.exit(0);
                 title = getString(R.string.title_exit);
                 break;
             default:
